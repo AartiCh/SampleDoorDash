@@ -49,22 +49,19 @@ public class RestaurantDetailFragment extends Fragment {
 
         Bundle bundle = getActivity().getIntent().getExtras(); // Getting the Bundle object that pass from another activity
 
-        if(savedInstanceState == null) {
-            if (bundle != null)
-                restaurantItem = bundle.getParcelable(MainActivity.SELECTED_ITEM);
+        if (bundle != null)
+            restaurantItem = bundle.getParcelable(MainActivity.SELECTED_ITEM);
 
-            if (restaurantItem != null) {
+        if (restaurantItem != null) {
 
-                mRestaurantTitle.setText(restaurantItem.getName());
-                mRestaurantDesc.setText(restaurantItem.getDescription());
-                mDeliveryStatus.setText(restaurantItem.getStatus());
+            mRestaurantTitle.setText(restaurantItem.getName());
+            mRestaurantDesc.setText(restaurantItem.getDescription());
+            mDeliveryStatus.setText(restaurantItem.getStatus());
 
-                Glide.with(getActivity().getApplicationContext())
-                            .load(restaurantItem.getCoverImageUrl())
-                            .into(mImageView);
+            Glide.with(getActivity().getApplicationContext())
+                        .load(restaurantItem.getCoverImageUrl())
+                        .into(mImageView);
 
-            }
         }
-
     }
 }
