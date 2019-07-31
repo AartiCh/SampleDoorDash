@@ -40,6 +40,7 @@ public class RestaurantFragment extends Fragment {
     private MyRestaurantRecyclerViewAdapter.OnRestaurantClickListener mListener;
     private final List<Restaurant> list = new ArrayList<>();
     private MyRestaurantRecyclerViewAdapter adapter;
+    private ProgressBar progressBar;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -74,7 +75,7 @@ public class RestaurantFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
 
-        final ProgressBar progressBar = getActivity().findViewById(R.id.progress_bar);
+        progressBar = getActivity().findViewById(R.id.progress_bar);
 
         // Set the adapter
         if (recyclerView instanceof RecyclerView) {
@@ -85,21 +86,6 @@ public class RestaurantFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            RestaurantViewModel restaurantViewModel;
-            restaurantViewModel = ViewModelProviders.of(this).get(RestaurantViewModel.class);
-            restaurantViewModel.getRestaurantList().observe(this, new Observer<List<Restaurant>>() {
-                @Override
-                public void onChanged(@Nullable List<Restaurant> movieItems) {
-                    list.clear();
-                    if (movieItems != null) {
-                        list.addAll(movieItems);
-                    }
-                    adapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.GONE);
-
-                }
-            });
-
             adapter = new MyRestaurantRecyclerViewAdapter(list, mListener, this.getContext());
             recyclerView.setAdapter(adapter);
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
@@ -107,6 +93,26 @@ public class RestaurantFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState){
+
+        super.onActivityCreated(savedInstanceState);
+        RestaurantViewModel restaurantViewModel;
+        restaurantViewModel = ViewModelProviders.of(this).get(RestaurantViewModel.class);
+        restaurantViewModel.getRestaurantList().observe(this, new Observer<List<Restaurant>>() {
+            @Override
+            public void onChanged(@Nullable List<Restaurant> movieItems) {
+                list.clear();
+                if (movieItems != null) {
+                    list.addAll(movieItems);
+                }
+                adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
+
+            }
+        });
     }
 
     @Override
